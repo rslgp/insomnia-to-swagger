@@ -1,6 +1,10 @@
 # Insomnia to Swagger README
 
-**USAGE:** open exported insomnia JSON, `ctrl + shift + P`, type `swagger`
+**USAGE:** 
+- open exported insomnia JSON, `ctrl + shift + P`
+- type `swagger`
+- run command ```Convert insomnia (JSON) to swagger (YAML) openapi v3```
+- save generated .yaml
 
 ## FAQ
 
