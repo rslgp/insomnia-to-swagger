@@ -4,14 +4,18 @@ const yaml = require("js-yaml");
 function convertToYaml(insomniaData) {
   // Extract the environment data
   let ENV = {}, ENV_REF = {};
+  let existsENV = false, existsREFS = false;
   insomniaData.resources.forEach(
     (resource) => {
       if (resource._type === "environment") {
-        if (resource.name === "ENVS") ENV = resource.data;
-        if (resource.name === "REFS") ENV_REF = resource.data;
+        if (resource.name === "ENVS") {ENV = resource.data; existsENV=true;}
+        if (resource.name === "REFS") {ENV_REF = resource.data; existsREFS=true;}
       }
     }
   );
+
+  if(existsENV === false) throw new Error('Missing ENVS inside Base Enviroment (check extension guide)');
+  if(existsREFS === false) throw new Error('Missing REFS inside Base Enviroment (check extension guide)');
 
   /**
    *info:{
@@ -357,12 +361,15 @@ function convertToYaml(insomniaData) {
 
       // Handle URL query parameters for GET requests
       // if(method=="get")console.log(">>> resource", resource)
+      
+      if(resource.parameters) //prevent error
       resource.parameters.forEach((param) => {
         // console.log(">>> param", param);
         queryParameters[param.name] = configParams(param, "query");
       });
 
       //handle path url
+      if(resource.pathParameters) //prevent error
       resource.pathParameters.forEach((param) => {
         // console.log(">>> param", param);
         path = path.replace(`/:${param.name}`, `/{${param.name}}`);
