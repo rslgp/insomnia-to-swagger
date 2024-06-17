@@ -1,0 +1,44 @@
+{
+  "name": "insomnia-to-swagger",
+  "displayName": "Insomnia to Swagger",
+  "description": "Convert Insomnia collection JSON to swagger YAML openapi (postman compatible)",
+  "version": "0.0.1",
+  "publisher": "rslgp",
+  "repository": "https://github.com/rslgp/insomnia-to-swagger",
+  "license": "MIT",
+  "categories": [
+    "Other"
+  ],
+  "icon": "images/icon-insomnia-swagger.png",
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "insomniaToSwagger.convert",
+        "title": "Convert insomnia (JSON) to swagger (YAML) openapi v3",
+        "category": "JSON"
+      }
+    ]
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0"
+  }
+}
