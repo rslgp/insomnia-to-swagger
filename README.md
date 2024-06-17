@@ -99,9 +99,9 @@ ENVS
 }
 ```
 
-\!\[ENVS\]\(images/ENVS.png\)
+![ENVS](https://raw.githubusercontent.com/rslgp/insomnia-to-swagger/main/images/ENVS.png)
 
-\!\[REFS\]\(images/REFS.png\)
+![REFS](https://raw.githubusercontent.com/rslgp/insomnia-to-swagger/main/images/REFS.png)
 
 ```json
 {
@@ -128,17 +128,9 @@ ENVS
 }
 ```
 
-Entity example (place at REFS)
+![Entity description config](https://raw.githubusercontent.com/rslgp/insomnia-to-swagger/main/images/Entity_1.png)
 
-```json
-"EntityExample": {
-	"column1": true
-},
-```
-
-\!\[Entity description config\]\(images/Entity_1.png\)
-
-\!\[Entity folder structure CRUD\]\(images/Entity_2.png\)
+![Entity folder structure CRUD](https://raw.githubusercontent.com/rslgp/insomnia-to-swagger/main/images/Entity_2.png)
 
 ```
 	ENTITY FOLDER
