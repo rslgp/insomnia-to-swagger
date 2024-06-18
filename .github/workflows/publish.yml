@@ -21,6 +21,13 @@ jobs:
       - name: Install dependencies
         run: npm install -g vsce && npm i
 
+# auto config patch
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+# END auto config patch
+
       - name: Package and publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
