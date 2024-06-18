@@ -14,8 +14,70 @@ function convertToYaml(insomniaData) {
     }
   );
 
-  if(existsENV === false) throw new Error('Missing ENVS inside Base Enviroment (check extension guide)');
-  if(existsREFS === false) throw new Error('Missing REFS inside Base Enviroment (check extension guide)');
+  //ALLOW use without config base enviroment
+  if(existsENV === false) {
+    ENV = {
+      "SecurityFixEnabled": true,
+      "API_URL": "https://<<PRODUCTION_URL>>",
+      "API_URL_LOCAL": "http://localhost:3000",
+      "info": {
+        "description": "api desc (warning check extension guide, config on insomnia base enviroments)",
+        "version": "1.0.0",
+        "title": "api title",
+        "contact": {
+          "email": "author@gmail.com"
+        }
+      },
+      "RESPONSES_TEMPLATE": {
+        "200": {
+          "description": "Success."
+        },
+        "400": {
+          "description": "Missing params on request or validation error."
+        },
+        "401": {
+          "description": "Access token is missing or invalid."
+        },
+        "403": {
+          "description": "Forbidden."
+        },
+        "404": {
+          "description": "Resource not found."
+        },
+        "406": {
+          "description": "Not Acceptable."
+        },
+        "500": {
+          "description": "Internal Error."
+        }
+      }
+    }
+  }//throw new Error('Missing ENVS inside Base Enviroment (check extension guide)');
+
+  if(existsREFS === false) {
+    ENV_REF = {
+      "REFS": {
+        "COMPONENTS": {
+          "SECURITYSCHEMES": {},
+          "RESPONSES": {},
+          "SCHEMAS": {
+            "MISSING_SECURITY": {
+              "security_fix": true
+            },
+            "Pagination": {
+              "limit": 1,
+              "page": 1,
+              "count": 0,
+              "results": ["GENERIC ITEMS, from child components (allOf)"]
+            },
+            "EntityExample": {
+              "column1": true
+            }
+          }
+        }
+      }
+    }    
+  }//throw new Error('Missing REFS inside Base Enviroment (check extension guide)');
 
   /**
    *info:{
