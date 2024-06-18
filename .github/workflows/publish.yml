@@ -26,4 +26,4 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           vsce package
-          vsce publish
+          vsce publish --pat $VSCE_PAT
