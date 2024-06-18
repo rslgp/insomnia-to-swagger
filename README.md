@@ -1,12 +1,14 @@
 # Insomnia to Swagger README
 
 **USAGE:** 
-- config Base Enviroment with our ENVS and REFS (check CONFIGURE INSOMNIA)
+- (tested on Insomnia 9.2.0 [help > about])
+- (optional) config Base Enviroment with our ENVS and REFS (check CONFIGURE INSOMNIA)
 - export collection from insomnia (v4 json) (if postman check FAQ)
-- open on vscode the collection in JSON, `ctrl + shift + P`
+- open on vscode the collection in JSON
+- run command hotkey: `ctrl + shift + P`
 - type `swagger`
 - run command ```Convert insomnia (JSON) to swagger (YAML) openapi v3```
-- save generated .yaml
+- save generated .yaml (you can preview using openapi 42crunch extension)
 
 ## FAQ
 
