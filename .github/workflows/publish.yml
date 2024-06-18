@@ -19,13 +19,22 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install -g vsce && npm i
+        run: npm install -g @vscode/vsce && npm i
 
 # auto config patch
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Increment version
+        run: npm version patch
+
+      - name: Commit version bump # warning using force and use pending commit
+        run: |
+          git add package.json
+          git commit -m "Increment version [skip ci]" || echo "No changes to commit"
+          git push --force
 # END auto config patch
 
       - name: Package and publish
@@ -33,4 +42,4 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           vsce package
-          vsce publish patch --pat $VSCE_PAT
+          vsce publish --pat $VSCE_PAT
