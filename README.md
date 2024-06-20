@@ -18,9 +18,9 @@
 
 ## Features
 
-Auto generate swagger openapi v3 from insomnia collection. 
-Only need to use JSON format (no more OpenApi specifications details)
-(optional, default enabled) includes automatic security auditing and defaults that can be customized only as needed
+- Auto generate swagger openapi v3 from insomnia collection. 
+- Only need to use JSON format (no more OpenApi specifications details)
+- (optional, default enabled) includes automatic security auditing and defaults that can be customized only as needed
 
 ## Requirements
 
