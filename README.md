@@ -1,4 +1,4 @@
-# Insomnia to Swagger README
+# Insomnia to Swagger converter README
 
 **USAGE:** 
 - (tested on Insomnia 9.2.0 [help > about])
