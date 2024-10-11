@@ -372,7 +372,8 @@ function convertToYaml(insomniaData) {
         let not_using_200 = false;
         for (let status in description.responses) {
           desc_responses[status] = description.responses[status];
-          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.entity(entity);
+
+          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.replace('$','');
           if (status.startsWith("2")) {
             if (status !== "200") not_using_200 = true;
             responseBodyExample =
