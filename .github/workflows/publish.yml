@@ -28,7 +28,10 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Increment version
-        run: npm version patch
+        run:  |
+          git reset --hard HEAD
+          git pull -f
+          npm version patch
 
       - name: Commit version bump # warning using force and use pending commit
         run: |
