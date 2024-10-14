@@ -8,14 +8,14 @@ function convertToYaml(insomniaData) {
   insomniaData.resources.forEach(
     (resource) => {
       if (resource._type === "environment") {
-        if (resource.name === "ENVS") {ENV = resource.data; existsENV=true;}
-        if (resource.name === "REFS") {ENV_REF = resource.data; existsREFS=true;}
+        if (resource.name === "ENVS") { ENV = resource.data; existsENV = true; }
+        if (resource.name === "REFS") { ENV_REF = resource.data; existsREFS = true; }
       }
     }
   );
 
   //ALLOW use without config base enviroment
-  if(existsENV === false) {
+  if (existsENV === false) {
     ENV = {
       "SecurityFixEnabled": true,
       "API_URL": "https://<<PRODUCTION_URL>>",
@@ -54,7 +54,7 @@ function convertToYaml(insomniaData) {
     }
   }//throw new Error('Missing ENVS inside Base Enviroment (check extension guide)');
 
-  if(existsREFS === false) {
+  if (existsREFS === false) {
     ENV_REF = {
       "REFS": {
         "COMPONENTS": {
@@ -76,7 +76,7 @@ function convertToYaml(insomniaData) {
           }
         }
       }
-    }    
+    }
   }//throw new Error('Missing REFS inside Base Enviroment (check extension guide)');
 
   /**
@@ -257,7 +257,9 @@ function convertToYaml(insomniaData) {
     return result;
   }
   const configParams = (param, in_tipo) => {
-    if (param.value[3] === "_") { // using imsonia variables
+    if (param.name === "$ref" || param.name === "_$REF") return { $ref: param.value }; //use components value
+
+    if (param.value[3] === "_") { // using insomnia variables
       param.value = param.value.replace("_.", "").replace("{{ ", "").replace(" }}", "");
       param.value = getNestedValue(ENV_REF, param.value);
     }
@@ -281,8 +283,9 @@ function convertToYaml(insomniaData) {
 
   const configREFS = (local_REFS) => {
     const ref_schemas = local_REFS.COMPONENTS.SCHEMAS;
-    const ref_responses = local_REFS.COMPONENTS.RESPONSES;
-    const ref_security = local_REFS.COMPONENTS.SECURITYSCHEMES;
+    openapiBase.components.responses = local_REFS.COMPONENTS.RESPONSES || {};
+    openapiBase.components.securitySchemes = local_REFS.COMPONENTS.SECURITYSCHEMES || {};
+    openapiBase.components.parameters = local_REFS.COMPONENTS.PARAMETERS || {};
     // console.log(resource.data.REFS.COMPONENTS.SCHEMAS);
     for (let key in ref_schemas) {
       if (key.indexOf("Paged") !== -1) {
@@ -294,9 +297,6 @@ function convertToYaml(insomniaData) {
         openapiBase.components.schemas[key] = jsonToOpenApiSchema(ref_schemas[key]);
       }
     }
-    openapiBase.components.responses = ref_responses;
-
-    openapiBase.components.securitySchemes = ref_security;
   }
 
   // const setEntity = (text, entity) => {
@@ -373,7 +373,7 @@ function convertToYaml(insomniaData) {
         for (let status in description.responses) {
           desc_responses[status] = description.responses[status];
 
-          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.replace('$','');
+          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.replace('$', '');
           if (status.startsWith("2")) {
             if (status !== "200") not_using_200 = true;
             responseBodyExample =
@@ -424,20 +424,20 @@ function convertToYaml(insomniaData) {
 
       // Handle URL query parameters for GET requests
       // if(method=="get")console.log(">>> resource", resource)
-      
-      if(resource.parameters) //prevent error
-      resource.parameters.forEach((param) => {
-        // console.log(">>> param", param);
-        queryParameters[param.name] = configParams(param, "query");
-      });
+
+      if (resource.parameters) //prevent error
+        resource.parameters.forEach((param) => {
+          // console.log(">>> param", param);
+          queryParameters[param.name] = configParams(param, "query");
+        });
 
       //handle path url
-      if(resource.pathParameters) //prevent error
-      resource.pathParameters.forEach((param) => {
-        // console.log(">>> param", param);
-        path = path.replace(`/:${param.name}`, `/{${param.name}}`);
-        pathParameters[param.name] = configParams(param, "path");
-      });
+      if (resource.pathParameters) //prevent error
+        resource.pathParameters.forEach((param) => {
+          // console.log(">>> param", param);
+          path = path.replace(`/:${param.name}`, `/{${param.name}}`);
+          pathParameters[param.name] = configParams(param, "path");
+        });
 
       if (!openapiBase.paths[path]) {
         openapiBase.paths[path] = {};

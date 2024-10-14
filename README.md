@@ -33,10 +33,9 @@
 ## Reserved keywords tokens
 
 - **$ENTITY** (will be replaced to closest parent folder of request)
-- **$\_REF** (alias to $ref if get trouble with $ref key on json)
-- **$\_PAGED** (used to auto generate pagination)
+- **\_$REF** (alias to $ref if get trouble with $ref key on json)
+- **\_$PAGED** (used to auto generate pagination)
 - request settings description:
-
 ```
 "summary":{},
 "responses": {
@@ -50,6 +49,10 @@
 "request_example":{},
 "response_example:{}
 ```
+
+## useful tips
+- (v0.21) you can use on query, path, body on insomnia this -> $ref:#/components/parameters/FilterParameter (or _$REF) to reuse ref component parameters (insomnia Base_ENV REFS > PARAMETERS > json)
+
 
 ## COMMUNITY CONTRIBUTE:
 
@@ -118,6 +121,7 @@ ENVS
   "REFS": {
     "COMPONENTS": {
       "SECURITYSCHEMES": {},
+      "PARAMETERS": {},
       "RESPONSES": {},
       "SCHEMAS": {
         "MISSING_SECURITY": {
