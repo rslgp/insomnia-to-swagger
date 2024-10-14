@@ -51,7 +51,7 @@
 ```
 
 ## useful tips
-- (v0.21) you can use on query, path, body on insomnia this -> $ref:#/components/parameters/FilterParameter (or _$REF) to reuse ref component parameters (insomnia Base_ENV REFS > PARAMETERS > json)
+- (v0.21) you can use on query, path, body [USE $REF<NUMBER>, example $ref1,$ref2 (includes $ref but differs on each others)] on insomnia this -> $ref:#/components/parameters/filter (or _$REF) to reuse ref component parameters (insomnia Base_ENV REFS > PARAMETERS > json)
 
 
 ## COMMUNITY CONTRIBUTE:

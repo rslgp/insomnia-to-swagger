@@ -257,7 +257,7 @@ function convertToYaml(insomniaData) {
     return result;
   }
   const configParams = (param, in_tipo) => {
-    if (param.name === "$ref" || param.name === "_$REF") return { $ref: param.value }; //use components value
+    if (param.name.includes("$ref")  || param.name.includes("_$REF")) return { $ref: param.value }; //use components value
 
     if (param.value[3] === "_") { // using insomnia variables
       param.value = param.value.replace("_.", "").replace("{{ ", "").replace(" }}", "");
