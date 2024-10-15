@@ -1,6 +1,9 @@
 // convert insomnia v4 json to swagger, Rafael Leao rslgp@cin.ufpe.br
 const yaml = require("js-yaml");
 
+const outside_mem = [];
+
+// TO DEBUG with console.log, VSCODE > HELP > TOGGLE DEVELOPER TOOLS
 function convertToYaml(insomniaData) {
   // Extract the environment data
   let ENV = {}, ENV_REF = {};
@@ -373,7 +376,7 @@ function convertToYaml(insomniaData) {
         for (let status in description.responses) {
           desc_responses[status] = description.responses[status];
 
-          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.replace('$', '');
+          if (desc_responses[status].description) desc_responses[status].description = desc_responses[status].description.entity(entity); // use .entity here produces BUG in compiler, resuing responses from other entity
           if (status.startsWith("2")) {
             if (status !== "200") not_using_200 = true;
             responseBodyExample =
@@ -442,6 +445,9 @@ function convertToYaml(insomniaData) {
       if (!openapiBase.paths[path]) {
         openapiBase.paths[path] = {};
       }
+
+      outside_mem.push({...desc_responses});
+
       openapiBase.paths[path][method] = {
         summary: description.summary || resource.name,
         security: [{
@@ -449,7 +455,7 @@ function convertToYaml(insomniaData) {
         }],
         tags: [entity], //only leaves of tree folder structure
         parameters: Object.values(queryParameters).concat(Object.values(pathParameters)),
-        responses: desc_responses,
+        responses: outside_mem[outside_mem.length-1], // FIX BUG reusing response from one entity only
         requestBody: requestBodyExample
           ? {
             content: {
