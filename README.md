@@ -199,3 +199,5 @@ This extension is licensed under the [MIT License](https://github.com/rslgp/inso
 ## dev-local
 
     vsce package && code --install-extension ./*.vsix
+
+    help > toggle developer tools (next to about)

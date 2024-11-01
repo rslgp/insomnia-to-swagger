@@ -485,6 +485,11 @@ function convertToYaml(insomniaData) {
   let openapiYaml = yaml.dump(openapiBase);
 
   openapiYaml = openapiYaml.replaceAll("bearerAuth_read", '["read"]').replaceAll("bearerAuth_write", '["write"]');
+  
+  const securityChosen = Object.keys(openapiBase.components.securitySchemes)[0];
+  if(securityChosen){
+    openapiYaml = openapiYaml.replaceAll("bearerAuth", securityChosen);
+  }
 
   console.log("Conversion completed: openapi.yaml");
   return openapiYaml;
