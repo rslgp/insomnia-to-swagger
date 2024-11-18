@@ -142,7 +142,7 @@ function convertToYaml(insomniaData) {
 
   const LIMITS = {
     MAX_LENGTH: 255,
-    ACCEPTED_REGEX: "^[a-zA-Z0-9]+$"
+    ACCEPTED_REGEX: ENV.REGEX_INPUT || "^[a-zA-Z0-9- ]+$"
   }
   function jsonToOpenApiSchema(jsonData) {
     if (typeof jsonData !== "object" || jsonData === null) {

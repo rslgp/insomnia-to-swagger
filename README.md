@@ -86,6 +86,7 @@ ENVS
       "email": "author@gmail.com"
     }
   },
+  "REGEX_INPUT":"^[a-zA-Z0-9- ]+$",
   "RESPONSES_TEMPLATE": {
     "200": {
       "description": "Success."
