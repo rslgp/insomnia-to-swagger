@@ -260,7 +260,7 @@ function convertToYaml(insomniaData) {
     return result;
   }
   const configParams = (param, in_tipo) => {
-    if (param.name.includes("$ref")  || param.name.includes("_$REF")) return { $ref: param.value }; //use components value
+    if (param.name.includes("$ref") || param.name.includes("_$REF")) return { $ref: param.value }; //use components value
 
     if (param.value[3] === "_") { // using insomnia variables
       param.value = param.value.replace("_.", "").replace("{{ ", "").replace(" }}", "");
@@ -411,7 +411,6 @@ function convertToYaml(insomniaData) {
             requestBodyExample = jsonToOpenApiSchema(requestBodyExample);
           }
         }
-
         // response body schema
         // console.log(">>> DESC",description.response_example, typeof description.response_example);
         let temp_desc_resp = description.response_example;
@@ -423,6 +422,52 @@ function convertToYaml(insomniaData) {
         else responseBodyExample = JSON.parse(temp_desc_resp || "{}");
         temp_desc_resp = undefined;
 
+      }
+
+
+
+      // support multipart/form-data
+      let content_req_body = {};
+
+      content_req_body = {
+        content: {
+          "application/json": {
+            schema: requestBodyExample, // Use the parsed requestBodyExample object here
+          },
+        }
+      };
+      // Update to handle `multipart/form-data`
+      if (resource.body && resource.body.mimeType === "multipart/form-data") {
+        console.log("ARQUIVO FIX AQUI ENTROU");
+        const multipartParams = resource.body.params || [];
+        requestBodyExample = {
+          content: {
+            "multipart/form-data": {
+              schema: {
+                type: "object",
+                properties: {},
+              },
+              encoding: {},
+            },
+          },
+        };
+
+        multipartParams.forEach((param) => {
+          const isFile = param.type === "file";
+          requestBodyExample.content["multipart/form-data"].schema.properties[param.name] = isFile
+            ? { type: "string", format: "binary" } // For file uploads
+            : { type: "string", example: param.value };
+
+          // If encoding details are needed, add them
+          if (isFile) {
+            requestBodyExample.content["multipart/form-data"].encoding[param.name] = {
+              contentType: "application/octet-stream",
+            };
+          }
+        });
+
+        console.log("requestBodyExample", requestBodyExample);
+        content_req_body = requestBodyExample; // override content_req_body
       }
 
       // Handle URL query parameters for GET requests
@@ -446,7 +491,7 @@ function convertToYaml(insomniaData) {
         openapiBase.paths[path] = {};
       }
 
-      outside_mem.push({...desc_responses});
+      outside_mem.push({ ...desc_responses });
 
       openapiBase.paths[path][method] = {
         summary: description.summary || resource.name,
@@ -455,16 +500,8 @@ function convertToYaml(insomniaData) {
         }],
         tags: [entity], //only leaves of tree folder structure
         parameters: Object.values(queryParameters).concat(Object.values(pathParameters)),
-        responses: outside_mem[outside_mem.length-1], // FIX BUG reusing response from one entity only
-        requestBody: requestBodyExample
-          ? {
-            content: {
-              "application/json": {
-                schema: requestBodyExample, // Use the parsed requestBodyExample object here
-              },
-            },
-          }
-          : undefined,
+        responses: outside_mem[outside_mem.length - 1], // FIX BUG reusing response from one entity only
+        requestBody: requestBodyExample ? content_req_body : undefined,
       };
 
       if (!openapiBase.tags.some((t) => t.name === entity)) {
@@ -485,9 +522,9 @@ function convertToYaml(insomniaData) {
   let openapiYaml = yaml.dump(openapiBase);
 
   openapiYaml = openapiYaml.replaceAll("bearerAuth_read", '["read"]').replaceAll("bearerAuth_write", '["write"]');
-  
+
   const securityChosen = Object.keys(openapiBase.components.securitySchemes)[0];
-  if(securityChosen){
+  if (securityChosen) {
     openapiYaml = openapiYaml.replaceAll("bearerAuth", securityChosen);
   }
 
