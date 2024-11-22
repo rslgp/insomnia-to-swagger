@@ -425,50 +425,63 @@ function convertToYaml(insomniaData) {
       }
 
 
-
-      // support multipart/form-data
       let content_req_body = {};
-
       content_req_body = {
         content: {
           "application/json": {
-            schema: requestBodyExample, // Use the parsed requestBodyExample object here
+            schema: requestBodyExample,
           },
         }
       };
-      // Update to handle `multipart/form-data`
-      if (resource.body && resource.body.mimeType === "multipart/form-data") {
-        console.log("ARQUIVO FIX AQUI ENTROU");
-        const multipartParams = resource.body.params || [];
-        requestBodyExample = {
-          content: {
-            "multipart/form-data": {
-              schema: {
-                type: "object",
-                properties: {},
+
+      if (resource.body) {
+        const mimeType = resource.body.mimeType;
+
+        if (resource.body.text) {
+          content_req_body = {
+            content: {
+              [mimeType]: {
+                schema: jsonToOpenApiSchema(JSON.parse(resource.body.text)), // Use the parsed requestBodyExample object here
               },
-              encoding: {},
+            }
+          };
+        }
+
+        // support multipart/form-data
+        // Update to handle `multipart/form-data`
+        if (mimeType === "multipart/form-data") {
+          const multipartParams = resource.body.params || [];
+          requestBodyExample = {
+            content: {
+              [mimeType]: {
+                schema: {
+                  type: "object",
+                  properties: {},
+                },
+                encoding: {},
+              },
             },
-          },
-        };
+          };
 
-        multipartParams.forEach((param) => {
-          const isFile = param.type === "file";
-          requestBodyExample.content["multipart/form-data"].schema.properties[param.name] = isFile
-            ? { type: "string", format: "binary" } // For file uploads
-            : { type: "string", example: param.value };
+          multipartParams.forEach((param) => {
+            const isFile = param.type === "file";
+            requestBodyExample.content[mimeType].schema.properties[param.name] = isFile
+              ? { type: "string", format: "binary" } // For file uploads
+              : { type: "string", example: param.value };
 
-          // If encoding details are needed, add them
-          if (isFile) {
-            requestBodyExample.content["multipart/form-data"].encoding[param.name] = {
-              contentType: "application/octet-stream",
-            };
-          }
-        });
+            // If encoding details are needed, add them
+            if (isFile) {
+              requestBodyExample.content[mimeType].encoding[param.name] = {
+                contentType: "application/octet-stream",
+              };
+            }
+          });
 
-        console.log("requestBodyExample", requestBodyExample);
-        content_req_body = requestBodyExample; // override content_req_body
+          content_req_body = requestBodyExample; // override content_req_body
+        }
+
       }
+
 
       // Handle URL query parameters for GET requests
       // if(method=="get")console.log(">>> resource", resource)
@@ -501,7 +514,7 @@ function convertToYaml(insomniaData) {
         tags: [entity], //only leaves of tree folder structure
         parameters: Object.values(queryParameters).concat(Object.values(pathParameters)),
         responses: outside_mem[outside_mem.length - 1], // FIX BUG reusing response from one entity only
-        requestBody: requestBodyExample ? content_req_body : undefined,
+        requestBody: content_req_body,
       };
 
       if (!openapiBase.tags.some((t) => t.name === entity)) {

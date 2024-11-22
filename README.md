@@ -52,6 +52,7 @@
 
 ## useful tips
 - (v0.21) you can use on query, path, body [USE $REF<NUMBER>, example $ref1,$ref2 (includes $ref but differs on each others)] on insomnia this -> $ref:#/components/parameters/filter (or _$REF) to reuse ref component parameters (insomnia Base_ENV REFS > PARAMETERS > json)
+- if your exported file is very large, and nothing happens after the command, you may require to restart vscode window to work properly
 
 
 ## COMMUNITY CONTRIBUTE:
