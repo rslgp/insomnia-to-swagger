@@ -438,10 +438,20 @@ function convertToYaml(insomniaData) {
         const mimeType = resource.body.mimeType;
 
         if (resource.body.text) {
+          let schema_content;
+          switch(mimeType){
+            case "application/json":
+              schema_content = jsonToOpenApiSchema(JSON.parse(resource.body.text));
+              break;
+            default:
+              schema_content = jsonToOpenApiSchema(resource.body.text);
+              break;
+          }
+          
           content_req_body = {
             content: {
               [mimeType]: {
-                schema: jsonToOpenApiSchema(JSON.parse(resource.body.text)), // Use the parsed requestBodyExample object here
+                schema: schema_content, // Use the parsed requestBodyExample object here
               },
             }
           };
