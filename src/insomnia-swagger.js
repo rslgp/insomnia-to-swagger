@@ -439,7 +439,7 @@ function convertToYaml(insomniaData) {
 
         if (resource.body.text) {
           let schema_content;
-          switch(mimeType){
+          switch (mimeType) {
             case "application/json":
               schema_content = jsonToOpenApiSchema(JSON.parse(resource.body.text));
               break;
@@ -447,7 +447,7 @@ function convertToYaml(insomniaData) {
               schema_content = jsonToOpenApiSchema(resource.body.text);
               break;
           }
-          
+
           content_req_body = {
             content: {
               [mimeType]: {
@@ -494,7 +494,7 @@ function convertToYaml(insomniaData) {
 
 
       // Handle URL query parameters for GET requests
-      // if(method=="get")console.log(">>> resource", resource)
+      if (method == "get") content_req_body = null;
 
       if (resource.parameters) //prevent error
         resource.parameters.forEach((param) => {
