@@ -2,7 +2,7 @@
   "name": "insomnia-to-swagger",
   "displayName": "Insomnia to Swagger converter",
   "description": "Convert Insomnia collection JSON to swagger YAML openapi (postman compatible)\nmake API documentation really easy, just using JSON-driven (no more trouble with openapi formatting)",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "publisher": "rslgp",
   "repository": "https://github.com/rslgp/insomnia-to-swagger",
   "license": "MIT",
