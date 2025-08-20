@@ -1,4 +1,10 @@
 # Insomnia to Swagger converter README
+Last compatible Insomnia version (requires export in v4 JSON format):  
+[Insomnia 10.3.1 release](https://github.com/Kong/insomnia/releases/tag/core%4010.3.1)
+
+For help with compatibility between this extension and the latest Insomnia version,  
+please contribute by submitting a PR to update the export conversion file type reader from v4 (JSON) to v5 (YAML):  
+[Contribute here](https://github.com/rslgp/insomnia-to-swagger/edit/main/src/insomnia-swagger.js#L7)
 
 **USAGE:** 
 - (tested on Insomnia 9.2.0 [help > about])
